@@ -1,0 +1,161 @@
+{
+	"name": "jsqlsp",
+	"displayName": "Python Language Server",
+	"description": "Language server integration for VS Code.",
+	"version": "0.1.0",
+	"preview": true,
+	"serverInfo": {
+		"name": "Python Language Server",
+		"module": "jsqlsp"
+	},
+	"publisher": "dominik",
+	"license": "MIT",
+	"homepage": "https://github.com/DominikOcsofszki/vscode_plugin_lsp",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/DominikOcsofszki/vscode_plugin_lsp.git"
+	},
+	"bugs": {
+		"url": "https://github.com/DominikOcsofszki/vscode_plugin_lsp/issues"
+	},
+	"galleryBanner": {
+		"color": "#1e415e",
+		"theme": "dark"
+	},
+	"keywords": [
+		"language-server",
+		"lsp"
+	],
+	"engines": {
+		"vscode": "^1.78.0"
+	},
+	"categories": [
+		"Programming Languages",
+		"Linters",
+		"Formatters"
+	],
+	"capabilities": {
+		"virtualWorkspaces": {
+			"supported": false,
+			"description": "Virtual Workspaces are not supported."
+		}
+	},
+	"activationEvents": [
+		"onLanguage:python",
+		"onNotebook:jupyter-notebook",
+		"onNotebook:interactive"
+	],
+	"main": "./dist/extension.js",
+	"scripts": {
+		"vscode:prepublish": "npm run package",
+		"python:configure": "uv run --group build python scripts/configure_lsp.py",
+		"python:bundle": "uv run --group build python scripts/build_bundle.py",
+		"compile": "npm run python:configure && webpack",
+		"watch": "npm run python:configure && webpack --watch",
+		"package": "npm run python:bundle && webpack --mode production --devtool source-map --config ./webpack.config.js",
+		"pretest": "npm run compile && npm run lint",
+		"python:test": "npm run python:bundle && uv run --group build --group test python scripts/run_python_tests.py",
+		"lint": "eslint src",
+		"format-check": "prettier --check 'src/**/*.ts' 'build/**/*.yml' '.github/**/*.yml'",
+		"test": "npm run python:test",
+		"vsce-package": "vsce package -o jsqlsp.vsix"
+	},
+	"contributes": {
+		"configuration": {
+			"properties": {
+				"jsqlsp.cwd": {
+					"default": "${workspaceFolder}",
+					"description": "Sets the working directory for jsqlsp. Supported variables: `${workspaceFolder}` (workspace root) and `${fileDirname}` (directory of the current file).",
+					"scope": "resource",
+					"type": "string"
+				},
+				"jsqlsp.args": {
+					"default": [],
+					"description": "Arguments passed in. Each argument is a separate item in the array.",
+					"items": {
+						"type": "string"
+					},
+					"scope": "resource",
+					"type": "array"
+				},
+				"jsqlsp.path": {
+					"default": [],
+					"description": "Optional executable and arguments to override the configured server command.",
+					"scope": "resource",
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
+				"jsqlsp.importStrategy": {
+					"default": "useBundled",
+					"description": "Python mode only: choose where the Python server module is imported from.",
+					"enum": [
+						"useBundled",
+						"fromEnvironment"
+					],
+					"enumDescriptions": [
+						"Always use the bundled version of the Python server.",
+						"Use the Python server from the environment, falling back to the bundled version if it is unavailable."
+					],
+					"scope": "window",
+					"type": "string"
+				},
+				"jsqlsp.interpreter": {
+					"default": [],
+					"description": "Python mode only: optional Python executable and arguments used to launch the server.",
+					"scope": "resource",
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
+				"jsqlsp.showNotifications": {
+					"default": "off",
+					"description": "Controls when notifications are shown by this extension.",
+					"enum": [
+						"off",
+						"onError",
+						"onWarning",
+						"always"
+					],
+					"enumDescriptions": [
+						"All notifications are turned off, any errors or warning are still available in the logs.",
+						"Notifications are shown only in the case of an error.",
+						"Notifications are shown for errors and warnings.",
+						"Notifications are show for anything that the server chooses to show."
+					],
+					"scope": "machine",
+					"type": "string"
+				}
+			}
+		},
+		"commands": [
+			{
+				"title": "Restart Server",
+				"category": "Python Language Server",
+				"command": "jsqlsp.restart"
+			}
+		]
+	},
+	"dependencies": {
+		"@vscode/python-environments": "^1.0.0",
+		"@vscode/python-extension": "^1.0.6",
+		"fs-extra": "^11.4.0",
+		"vscode-languageclient": "^8.1.0"
+	},
+	"devDependencies": {
+		"@types/fs-extra": "^11.0.4",
+		"@types/node": "20.x",
+		"@types/vscode": "1.78.0",
+		"@typescript-eslint/eslint-plugin": "^8.62.1",
+		"@typescript-eslint/parser": "^8.57.0",
+		"@vscode/vsce": "^3.7.1",
+		"eslint": "^10.9.0",
+		"prettier": "^3.9.6",
+		"ts-loader": "^9.6.2",
+		"typescript": "^5.9.3",
+		"webpack": "^5.108.3",
+		"webpack-cli": "^7.1.0"
+	}
+}

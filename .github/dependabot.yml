@@ -1,0 +1,29 @@
+version: 2
+updates:
+  - package-ecosystem: 'github-actions'
+    directory: /
+    schedule:
+      interval: monthly
+    labels:
+      - 'no-changelog'
+
+  - package-ecosystem: 'uv'
+    directory: /
+    schedule:
+      interval: daily
+    labels:
+      - 'debt'
+    commit-message:
+      include: 'scope'
+      prefix: 'uv'
+
+  - package-ecosystem: 'npm'
+    directory: /
+    schedule:
+      interval: monthly
+    labels:
+      - 'no-changelog'
+    ignore:
+      - dependency-name: '@types/vscode'
+      - dependency-name: '@types/node'
+      - dependency-name: 'vscode-languageclient'

@@ -1,0 +1,26 @@
+[project]
+name = "jsqlsp-extension"
+version = "0.1.0"
+description = "Python tooling for the jsqlsp VS Code extension"
+requires-python = ">=3.12"
+dependencies = [
+    "packaging",
+    "pygls",
+]
+
+[dependency-groups]
+build = [
+    "pydantic-settings",
+]
+test = [
+    "pytest",
+    "python-jsonrpc-server",
+]
+lint = [
+    "black",
+    "isort",
+    "pylint",
+]
+
+[tool.uv]
+package = false

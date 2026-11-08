@@ -1,0 +1,15 @@
+out
+dist
+node_modules
+.vscode-test/
+*.vsix
+.venv/
+.vs/
+bundled/libs/
+bundled/tool/lsp_config.json
+.env
+.env.*
+!.env.example
+**/__pycache__
+**/.pytest_cache
+**/.vs
